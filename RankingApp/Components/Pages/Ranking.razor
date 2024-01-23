@@ -1,0 +1,71 @@
+﻿@page "/ranking"
+@using RankingApp.Data.Services
+@using RankingApp.Data.Models
+
+@inject RankingService RankingService
+
+<h3>Ranking</h3>
+
+
+<AuthorizeView>
+
+    <Authorized>
+        @if (_gameResults == null)
+        {
+            <p>
+                <em>Loading...</em>
+            </p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Score</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var gameResult in _gameResults)
+                {
+                    <tr>
+                        <td>@gameResult.Username</td>
+                        <td>@gameResult.Score</td>
+                        <td>@gameResult.Date.ToString()</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        
+        <p>
+            <button class="btn btn-primary" @onclick="AddGameResult">Add</button>
+        </p>
+
+    </Authorized>
+
+    <NotAuthorized>
+        <p>you are not authorized</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    List<GameResult> _gameResults;
+
+    bool _showPopup;
+    GameResult _gameResult;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _gameResults = await RankingService.GetGameResultsAsync();
+    }
+
+    private void AddGameResult()
+    {
+        _showPopup = true;
+        _gameResult = new GameResult(){};
+    }
+
+}
