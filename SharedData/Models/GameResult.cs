@@ -1,4 +1,4 @@
-﻿namespace RankingApp.Data.Models;
+﻿namespace SharedData.Models;
 
 public class GameResult
 {
